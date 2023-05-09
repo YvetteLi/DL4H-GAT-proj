@@ -191,12 +191,30 @@ def main():
         scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=opt.lr_dc_step, gamma=opt.lr_dc)
 
         logging.warning(model)
-
+        start = time.time()
+        best_result = [0, 0]
+        best_epoch = [0, 0]
+        bad_counter = 0
         for epoch in tqdm(range(opt.epoch)):
             scheduler.step()
             forward(model, train_loader, opt.device, writer, epoch, top_k=opt.topk, optimizer=optimizer, train_flag=True)
             with torch.no_grad():
-                forward(model, test_loader, opt.device, writer, epoch, top_k=opt.topk, train_flag=False)
+                hit, mrr = forward(model, test_loader, opt.device, writer, epoch, top_k=opt.topk, train_flag=False)
+                flag = 0
+                if hit >= best_result[0]:
+                    best_result[0] = hit
+                    best_epoch[0] = epoch
+                    flag = 1
+                if mrr >= best_result[1]:
+                    best_result[1] = mrr
+                    best_epoch[1] = epoch
+                    flag = 1
+                logging.info('Best Result:')
+                logging.info('\tPrecision@20:\t%.4f\tMMR@20:\t%.4f\tEpoch:\t%d,\t%d' % (
+                best_result[0], best_result[1], best_epoch[0], best_epoch[1]))
+                bad_counter += 1 - flag
+                if bad_counter >= opt.patience:
+                    break
 
 
 if __name__ == '__main__':
