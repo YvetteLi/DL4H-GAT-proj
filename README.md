@@ -44,7 +44,6 @@ The dataset needed to reproduce the experiments
 - PPI: <https://data.dgl.ai/dataset/ppi.zip>
 - DIGINETICA: <http://cikm2016.cs.iupui.edu/cikm-cup> or <https://competitions.codalab.org/competitions/11161>
 
-There is a small dataset `sample` included in the folder `datasets/`, which can be used to test the correctness of the code.
 
 Before preprocessing the DIGINETICA data, the header needed to be added to the train-item-views.csv
 
