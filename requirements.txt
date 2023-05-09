@@ -1,0 +1,11 @@
+torch==2.0.0+cu118
+numpy
+igraph
+pycairo
+cairocffi
+networkx
+ray==2.4
+tensorboardX
+torch_geometric
+GitPython
+scikit-learn
