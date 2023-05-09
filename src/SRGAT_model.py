@@ -50,12 +50,13 @@ class GNNModel(nn.Module):
         hidden_size: the number of units in a hidden layer.
         n_node: the number of items in the whole item set for embedding layer.
     """
-
     def __init__(self, hidden_size, n_node):
         super(GNNModel, self).__init__()
         self.hidden_size, self.n_node = hidden_size, n_node
         self.embedding = nn.Embedding(self.n_node, self.hidden_size)
-        self.gated = GatedGraphConv(self.hidden_size, num_layers=1)
+
+        self.gat1 = GATConv(self.hidden_size, self.hidden_size, heads=1)
+        self.gat2 = GATConv(self.hidden_size, self.hidden_size, heads=1)
         self.e2s = Embedding2Score(self.hidden_size)
         self.loss_function = nn.CrossEntropyLoss()
         self.reset_parameters()
@@ -69,10 +70,13 @@ class GNNModel(nn.Module):
         x, edge_index, batch = data.x - 1, data.edge_index, data.batch
 
         embedding = self.embedding(x).squeeze()
-        hidden = self.gated(embedding, edge_index)
-        hidden2 = F.relu(hidden)
+        hidden1 = self.gat1(embedding, edge_index)
+        hidden1 = F.relu(hidden1)
+        # hidden = F.dropout(hidden, training=self.training)
+        # hidden = self.gat2(hidden1, edge_index)
+        # hidden2 = F.relu(hidden2)
 
-        return self.e2s(hidden2, self.embedding, batch)
+        return self.e2s(hidden1, self.embedding, batch)
 
 
 def forward(model, loader, device, writer, epoch, top_k=20, optimizer=None, train_flag=True):
@@ -115,3 +119,4 @@ def forward(model, loader, device, writer, epoch, top_k=20, optimizer=None, trai
         mrr = np.mean(mrr) * 100
         writer.add_scalar('index/hit', hit, epoch)
         writer.add_scalar('index/mrr', mrr, epoch)
+        return hit, mrr
