@@ -174,7 +174,7 @@ optional arguments:
 ### Diginetica Results with RS-GNN, RS-GAT and GC-SAN
 |  |SR-GNN  | SR-GNN | SR-GAT |SR-GAT  | GC-SAN | GC-SAN |
 |---------|---------|--------|---------|--------|---------|--------|
-| Epoch   | Prec@20 | MRR@20 | Prec@20 | MRR@21 | Prec@20 | MRR@22 |
+| Exp   | Prec@20 | MRR@20 | Prec@20 | MRR@21 | Prec@20 | MRR@22 |
 | 1       | 50.71   | 17.85  | 50.15   | 17.41  | 48.28   | 16.74  |
 | 2       | 50.38   | 17.93  | 50.17   | 17.42  | 48.27   | 16.69  |
 | 3       | 50.53   | 17.85  | 49.92   | 17.36  | 47.94   | 16.54  |
